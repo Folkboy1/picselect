@@ -4,6 +4,7 @@ import './index.css'
 class Picselect extends React.Component{
         state = {
             checks: [false, false, false],
+            count:0,
             datalist: [
                 {
                     id: '1',
@@ -23,6 +24,8 @@ class Picselect extends React.Component{
             ]
         }
     
+    
+
     render() {
         return (
             <div>
@@ -31,19 +34,23 @@ class Picselect extends React.Component{
                             checked={this.state.checks.every(item => item)?"checked":""}
                             onChange={this.handleAllChange} />
                     <span className="css-span"></span>
+                   <span>选中了{this.state.count}个</span>
+                   
                 </label>
 
                 <div className="contain">
                     
                     {
                         this.state.datalist.map((item, index) => {
-                            return <div>
-                                <div className="item" url={item.url} key={item.id}>
+                            return <div key={item.id}>
+                                <div className="item" url={item.url} >
                                     <label className="css-label">
                                         <input type="checkbox" className={`css-checkbox ${index}`}
                                            checked={this.state.checks[index]?"checked":""}
-                                            onChange={(e) => {this.handleItemChange(e)}} />
+                                            onChange={(e) => {this.handleItemChange(e) }} />
+                                            
                                         <span className="css-span"></span>
+                                  
                                     </label>
                                     <img src={item.url} alt={item.name}/>
                                     </div>
@@ -60,9 +67,11 @@ class Picselect extends React.Component{
     handleAllChange=()=>{
         let newChecks = this.state.checks;
         newChecks.fill(this.refs.myAllCheck.checked);
-        this.setState({
-            checks: newChecks
+      this.setState({
+            checks: newChecks,
+            count:this.state.checks.filter(item=>item).length
         });
+
     }
 
     handleItemChange = (e) => {
@@ -70,7 +79,8 @@ class Picselect extends React.Component{
         let newChecks = this.state.checks;
         newChecks[target] = e.target.checked;
         this.setState({
-            checks: newChecks
+            checks: newChecks,
+            count:this.state.checks.filter(item=>item).length
         });
     }
 
